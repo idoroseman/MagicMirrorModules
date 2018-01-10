@@ -1,0 +1,123 @@
+/* global Log, Module, moment, config */
+/* Magic Mirror
+ * Module: Clock
+ *
+ * By Michael Teeuw http://michaelteeuw.nl
+ * MIT Licensed.
+ */
+
+Module.register("MMM-Birthday",{
+	// Module config defaults.
+	defaults: {
+		filename: "events.json",
+	},
+
+	// Define required scripts.
+	getScripts: function() {
+		return ["fs.js", "moment.js", "moment-timezone.js"];
+	},
+
+	// Define styles.
+	getStyles: function() {
+		return [];
+	},
+
+	// Define start sequence.
+	start: function() {
+		console.log("Starting module: " + this.name);
+		Log.info("Starting module: " + this.name);
+
+	        this.loaded = false;
+		console.log(this.name+" loading "+config.filename);
+        	fs.readFile(config.filename, "utf8", (err, data) => {
+                	if (err) {
+               		        Log.error("missing file " + config.filename); // may be filename does not exists?
+                    		return;
+                	}
+                	this.loaded = true
+                	this.events = JSON.parse(data);
+                        console.log("file parse, calculating events");
+               		this.recalcEvents();
+			console.log("updating DOM");
+                	this.updateDom();
+        	});
+
+
+		// Schedule update interval.
+	    	var d = new Date();
+		this.lastUpdate = d.getDay()
+		var self = this;
+		setInterval(() => {
+		    var d = new Date();
+		    id (self.lastUpdate != d.getDay()){
+		        this.lastUpdate = d.getDay()
+                        self.recalcEvents();
+		        self.updateDom();
+		    }
+
+		}, 5 * 60 * 1000);
+
+		// Set locale.
+		moment.locale(config.language);
+
+	},
+
+	// Override dom generator.
+	getDom: function() {
+
+        var wrapper = document.createElement("table");
+		wrapper.className = "small";
+
+		if (this.events.length === 0) {
+			wrapper.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
+			wrapper.className = "small dimmed";
+			return wrapper;
+		}
+
+		for (var e in this.events) {
+		    var event = events[e];
+			var eventWrapper = document.createElement("tr");
+			// time from now
+			var timeWrapper = document.createElement("td")
+			timeWrapper.innerHTML = moment(event.nextDate, "x").fromNow();
+			eventWrapper.appendChild(timeWrapper)
+            // title
+            var titleWrapper = document.createElement("td")
+            titleWrapper.innerHTML = event.title
+            eventWrapper.appendChild(titleWrapper);
+            // count
+            var countWrapper = document.createElement("td")
+            countWrapper.innerHTML = event.count
+            // symbol
+			var symbolWrapper = document.createElement("td");
+			symbolWrapper.className = "symbol align-right";
+            var symbol = document.createElement("span");
+			symbol.className = "fa fa-fw fa-" + "diamond";
+			symbolWrapper.appendChild(symbol);
+            eventWrapper.appendChild(symbolWrapper);
+
+        }
+		// Return the wrapper to the dom.
+		return wrapper;
+	},
+
+	recalcEvents: function() {
+        var list = this.events;
+        var currentYear = moment().format("YYYY")
+        var nextYear = moment().add(1,'y').format("YYYY")
+        for (var i in list){
+            var e = list[i]
+            var tokens = e.date.split(' ')
+            var t = moment(currentYear+"-"+tokens[1]+"-"+tokens[0], "YYYY-MMM-DD")
+            if (t.fromNow() > 0){
+                list[i].nextDate = t
+                list[i].count = int(currentYear) - int(tokens[2])
+            }
+            else {
+                list[i].nextDate = moment(nextYear+"-"+tokens[1]+"-"+tokens[0], "YYYY-MMM-DD")
+                list[i].count = int(nextYear) - int(tokens[2])
+            }
+        }
+        this.events = list.sort((a,b)=>{return a.nextDate - b.nextDate;})
+	}
+});
