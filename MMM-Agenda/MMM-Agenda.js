@@ -137,14 +137,15 @@ Module.register("MMM-Agenda", {
 		headerWrapper.className = "daychange bright";
 		var dateWrapper = document.createElement("td");
 		dateWrapper.colSpan = "3";
-		dateWrapper.innerHTML = titleDate.format("dddd,") + " " + titleDate.format("LL");
+		//dateWrapper.innerHTML = titleDate.format("dddd,") + " " + titleDate.format("LL") + " (" + this.translate("TODAY") + ")";
+		dateWrapper.innerHTML = this.translate("TODAY") ;
 		var dateSymbol = document.createElement("span");
 		dateSymbol.className = "fa fa-" + this.config.dateSymbol;
 		dateWrapper.appendChild(dateSymbol);
 		headerWrapper.appendChild(dateWrapper);
-    wrapper.appendChild(headerWrapper);
+    	wrapper.appendChild(headerWrapper);
 
-    var lineCount = 1;
+    	var lineCount = 1;
 
 		for (var e in events) {
 			if (lineCount>this.config.maximumEntries)
