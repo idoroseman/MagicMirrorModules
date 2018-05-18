@@ -124,6 +124,7 @@ Module.register("MMM-Agenda", {
 		var events = this.createEventList();
 		var wrapper = document.createElement("table");
 		wrapper.className = "small";
+		wrapper.setAttribute("dir", "rtl");
 
 		if (events.length === 0) {
 			wrapper.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
@@ -138,7 +139,7 @@ Module.register("MMM-Agenda", {
 		var dateWrapper = document.createElement("td");
 		dateWrapper.colSpan = "3";
 		//dateWrapper.innerHTML = titleDate.format("dddd,") + " " + titleDate.format("LL") + " (" + this.translate("TODAY") + ")";
-		dateWrapper.innerHTML = this.translate("TODAY") ;
+		dateWrapper.innerHTML = titleDate.format("dddd,") + " (" + this.translate("TODAY")+ ")" ;
 		var dateSymbol = document.createElement("span");
 		dateSymbol.className = "fa fa-" + this.config.dateSymbol;
 		dateWrapper.appendChild(dateSymbol);
@@ -151,8 +152,8 @@ Module.register("MMM-Agenda", {
 			if (lineCount>this.config.maximumEntries)
 			  break;
 			var event = events[e];
-      var eventDate = moment(event.startDate, "x");
-			if (eventDate.format("YYYY-MM-DD") != currDate){
+            var eventDate = moment(event.startDate, "x");
+			if (eventDate.format("YYYY-MM-DD") > currDate){
 				currDate = eventDate.format("YYYY-MM-DD")
 				var titleDate = moment(currDate,"YYYY-MM-DD")
 				var headerWrapper = document.createElement("tr");
