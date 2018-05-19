@@ -55,10 +55,10 @@ Module.register("MMM-School",{
 			for (var i=0; i<this.vacations.length; i++){
 			//console.log(s + " vs " + this.vacations[i]["dateStart"] + " till " +this.vacations[i]["dateEnd"]);
 			  if ((s>=this.vacations[i]["dateStart"]) && (s<this.vacations[i]["dateEnd"])) {
-				console.log("VACATION " + s + ": " + this.vacations[i]["summery"]);
+				console.log("VACATION " + s + ": " + this.vacations[i]["summary"] );
 				wrapper.innerHTML += "<center>";
 				wrapper.innerHTML += this.config.empty + "חופש" + this.config.empty + "<br/>";
-				wrapper.innerHTML += this.vacations[i]["summery"] + "<br/>";
+				wrapper.innerHTML += this.vacations[i]["summary"] + "<br/>";
 				wrapper.innerHTML += "</center>";
 				return wrapper;
 			  }
