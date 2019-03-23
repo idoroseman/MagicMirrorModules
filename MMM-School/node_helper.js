@@ -63,7 +63,7 @@ module.exports = NodeHelper.create({
 			    events.push(event);
 			}
 		}
-		console.log(JSON.stringify(events, null, ' '));
+		//console.log(JSON.stringify(events, null, ' '));
 		return events;
 	}
 	

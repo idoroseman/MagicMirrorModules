@@ -25,7 +25,7 @@ Module.register("MMM-Pool",{
 		var self = this;
 		setInterval(() => {
 			self.updateDom(); // no speed defined, so it updates instantly.
-		}, 60 * 60 * 1000); //perform every hour
+		}, 60 * 1000); //perform every hour
 		this.sendSocketNotification("START", {});
 	},
 	
@@ -34,6 +34,7 @@ Module.register("MMM-Pool",{
 	    console.log(notification);
 	    console.log(payload);
 		if (notification === "EVENTS_UPDATE") {
+		    console.log("pool", payload.date, payload.events);
 			this.events = payload.events;
 			this.isoDate = payload.date;
 			this.loaded = true;
@@ -60,7 +61,7 @@ Module.register("MMM-Pool",{
 		        
 		var wrapper = document.createElement("div");
 		var morningText = document.createElement("span");
-		if (this.events.morning_start === undefined)
+		if ()(this.events.morning_start) && (this.events.morning_start === undefined))
 			morningText.innerHTML = this.config.closed;
 		else 
 			morningText.innerHTML = this.events.morning_start_str + " - " + this.events.morning_end_str;

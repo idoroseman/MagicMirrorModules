@@ -58,7 +58,8 @@ Module.register("MMM-Birthday",{
 	getDom: function() {
 		var icons = {
 			birthday: "birthday-cake",
-		  wedding: "diamond"
+		  wedding: "diamond",
+                  anniversary: "diamond"
 		}
 	  var wrapper = document.createElement("table");
 	  wrapper.className = "small";

@@ -23,7 +23,7 @@ module.exports = NodeHelper.create({
 				this.lastUpdate = this.getDayOfWeek();
 				this.recalcEvents();
 				this.sendSocketNotification("EVENTS_UPDATE", {
-					events: this.events.slice(0, 7)
+					events: this.events.slice(0, 6)
 				});
 				}
 			},60*1000);

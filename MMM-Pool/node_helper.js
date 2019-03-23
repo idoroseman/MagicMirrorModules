@@ -21,17 +21,18 @@ module.exports = NodeHelper.create({
 
 		var self = this;
 		setInterval(() => {
-			if (self.lastUpdate != self.getDayOfWeek()) {
+//			if (self.lastUpdate != self.getDayOfWeek()) {
 				self.lastUpdate = self.getDayOfWeek();
 				self.recalcEvents();
 				var now = new moment.utc();
       			var isodate = now.toISOString().slice(0,10);
+      			// console.log("POOL",isodate, self.events[isodate]);
 				self.sendSocketNotification("EVENTS_UPDATE", {
 					date : isodate,
 					events: self.events[isodate]
 				});
-				}
-			},60*1000);
+//				}
+			},15*60*1000);
 
 	},
 
@@ -48,11 +49,10 @@ module.exports = NodeHelper.create({
 
 	    }
 	    else {
-	        console.log("DEBUG");
+	        console.log("POOL DEBUG");
 	        console.log(payload.name);
 	        console.log(payload.data);
 	        console.log(JSON.stringify(payload.data));
-
 	    }
 	},
 
@@ -62,9 +62,10 @@ module.exports = NodeHelper.create({
         files.forEach((file)=>{
             if (file.startsWith("."))
                 return;
+            console.log("POOL recalc", file);
 			var workbook = xlsx.readFile(this.path+"/files/"+file);
 			var sheet_name_list = workbook.SheetNames;
-			var worksheet = workbook.Sheets[sheet_name_list[0]];
+			var worksheet = workbook.Sheets[sheet_name_list[sheet_name_list.length-1]]; // doto: cycle all sheets
 			// find gym & pool title
 			var col = 1;
 			var row = 1;
@@ -92,35 +93,38 @@ module.exports = NodeHelper.create({
 				var desired_value = (desired_cell ? desired_cell.v : undefined);
 				if (desired_value === undefined)
 				  break;
+
 				var isodate = this.xlDateToString(desired_value);
 			    // morning start
 				var cell_address = String.fromCharCode(0x40 + col+2) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var morning_start = (desired_cell ? desired_cell.v: undefined);
-				var morning_start_str = (desired_cell ? desired_cell.v  + ":00": undefined);
+				var morning_start_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				// morning end
 				var cell_address = String.fromCharCode(0x40 + col+3) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var morning_end = (desired_cell ? desired_cell.v : undefined);
-				var morning_end_str = (desired_cell ? desired_cell.v  + ":00" : undefined);
+				var morning_end_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				//evening start
 				var cell_address = String.fromCharCode(0x40 + col+4) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var evening_start = (desired_cell ? desired_cell.v  : undefined);
-				var evening_start_str = (desired_cell ? desired_cell.v + ":00" : undefined);
+				var evening_start_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				// evening end
 				var cell_address = String.fromCharCode(0x40 + col+5) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var evening_end = (desired_cell ? desired_cell.v : undefined);
-				var evening_end_str = (desired_cell ? desired_cell.v + ":00" : undefined);
+				var evening_end_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 
 				this.events[isodate] = {morning_start, morning_end, evening_start, evening_end,
 										morning_start_str, morning_end_str, evening_start_str, evening_end_str};
+				//console.log("POOL",isodate, this.events[isodate]);
 				row++;
 				}
-					
         });
         // console.log(JSON.stringify(this.events));
+        // console.log("POOL","------");	
+
 
     },
 
@@ -132,6 +136,14 @@ module.exports = NodeHelper.create({
     xlDateToString: function(d) {
       var parsedDate = xlsx.SSF.parse_date_code(d)
       var jsDate = new moment.utc({y:parsedDate.y, M:parsedDate.m-1, d:parsedDate.d});
-      return jsDate.toISOString().slice(0,10);
-    }
+      var isodate = jsDate.toISOString().slice(0,10);
+      return isodate
+    },
+    
+    intToTimeStr: function(t) {
+       h = Math.floor(t);
+       m = Math.floor((t-h) * 100);
+       result = h.toString() + ":" + m.toString().padStart(2, "0");
+       return result;
+    }    
 });
