@@ -61,7 +61,7 @@ Module.register("MMM-Pool",{
 		        
 		var wrapper = document.createElement("div");
 		var morningText = document.createElement("span");
-		if ()(this.events.morning_start) && (this.events.morning_start === undefined))
+		if ((!this.events.morning_start) || (this.events.morning_start === undefined))
 			morningText.innerHTML = this.config.closed;
 		else 
 			morningText.innerHTML = this.events.morning_start_str + " - " + this.events.morning_end_str;

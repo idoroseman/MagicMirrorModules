@@ -14,9 +14,10 @@ Module.register("MMM-Quotes",{
 
 	// Module config defaults.
 	defaults: {
-		updateInterval: 300,	// Value is in SECONDS
+		updateInterval: 30 * 60,	// Value is in SECONDS
 		fadeSpeed: 4,			// How fast (in SECONDS) to fade out and back in when changing quotes
 		category: 'random',		// Category to use
+		maxLength: 150, 
 		quotes: [] ,
 	},
 
@@ -32,7 +33,7 @@ Module.register("MMM-Quotes",{
 		// Schedule update timer.
 		var self = this;
 		setInterval(function() {
-			this.randomQuote();
+			self.randomQuote();
 		}, this.config.updateInterval * 1000);
 	},
 
@@ -57,10 +58,12 @@ Module.register("MMM-Quotes",{
 				el.innerHTML = text;
 				this.quote = el.getElementsByClassName( 'media-body' )[0].getElementsByTagName("div")[0].innerText
 				this.author = el.getElementsByClassName( 'media-attributed' )[0].innerText.substring(2)
-				//this.scheduleUpdate();	  
+				// this.scheduleUpdate();	  
 				console.log(this.quote, this.author);
-				this.updateDom(self.config.fadeSpeed * 1000);
-
+				if (this.quote.length < this.config.maxLength)
+    				this.updateDom(this.config.fadeSpeed * 1000);
+				else
+				    this.randomQuote();
 			  })
 	},
 
