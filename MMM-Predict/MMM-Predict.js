@@ -13,7 +13,7 @@ Module.register("MMM-Predict",{
 	defaults: {
 		location: [32.0637, 34.8717, 80],
 		satellites: ["SO-50", "AO-91", "AO-92", "ISS"],
-		minimum_elevation : 10,
+		minimum_elevation : 15,
 		lines : 7
 	},
 	

@@ -64,7 +64,7 @@ module.exports = NodeHelper.create({
           console.log(tle)
           console.log(this.location)
           const now = new Date().getTime();
-          var preditions = jspredict.transits(tle, this.location, now, now + 10*24*60*60*1000, 10)
+          var preditions = jspredict.transits(tle, this.location, now, now + 10*24*60*60*1000, this.minimum_elevation)
           preditions.forEach((per)=>{per.name=satName})
           this.preditions = this.preditions.concat(preditions)
         })
