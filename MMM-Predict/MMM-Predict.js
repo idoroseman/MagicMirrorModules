@@ -14,6 +14,7 @@ Module.register("MMM-Predict",{
 		location: [32.0637, 34.8717, 80],
 		satellites: ["SO-50", "AO-91", "AO-92", "ISS"],
 		minimum_elevation : 15,
+		accent_elevation : 50,
 		lines : 7
 	},
 	
@@ -44,6 +45,7 @@ Module.register("MMM-Predict",{
 	getDom: function() {
         var events = this.events;
 		var wrapper = document.createElement("table");
+		var now = Date.now();
 		
 		wrapper.className = "small";
 
@@ -61,6 +63,10 @@ Module.register("MMM-Predict",{
 			if (this.config.colored) {
 				eventWrapper.style.cssText = "color:" + this.colorForEvent(event);
 			}
+			
+			if ((event.startTime < now) && (event.endTime > now))
+				eventWrapper.style.cssText = "color:" + "green";
+				
 			eventWrapper.className = "xsmall";
 
 			var titleWrapper = document.createElement("td");
@@ -94,6 +100,8 @@ Module.register("MMM-Predict",{
 			var maxElWrapper = document.createElement("td");
 			maxElWrapper.innerHTML = Math.round(event.maxElevation);
 			maxElWrapper.className = "elevation";
+			if (event.maxElevation >= this.config.accent_elevation)
+			  maxElWrapper.className = "bright";
 			eventWrapper.appendChild(maxElWrapper);		
 						
 			wrapper.appendChild(eventWrapper);

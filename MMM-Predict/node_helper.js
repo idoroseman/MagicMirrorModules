@@ -54,22 +54,24 @@ module.exports = NodeHelper.create({
     
     calculate_predictions: function(){
         this.preditions = []
+        const now = new Date().getTime();
+        console.log("this location", this.location)
+
         this.satellites.forEach((satName)=>{
+          console.log("predicting for", satName)
           var tle = ""
-          Object.keys(this.tle).forEach((key)=>{ 
-            if (key.includes(satName)) 
-              tle = "0 "+satName+"\n"+this.tle[key]; 
-              })
-          console.log(satName)
-          console.log(tle)
-          console.log(this.location)
-          const now = new Date().getTime();
-          var preditions = jspredict.transits(tle, this.location, now, now + 10*24*60*60*1000, this.minimum_elevation)
-          preditions.forEach((per)=>{per.name=satName})
-          this.preditions = this.preditions.concat(preditions)
+          Object.keys(this.tle).forEach((key)=>{
+            if (key.includes(satName)) {
+              tle = "0 "+key+"\n"+this.tle[key]; 
+              console.log(key)
+			  console.log(tle)
+			  var preditions = jspredict.transits(tle, this.location, now, now + 10*24*60*60*1000, this.minimum_elevation)
+			  preditions.forEach((pred)=>{pred.name=key})
+			  this.preditions = this.preditions.concat(preditions)
+			  }
+            })
         })
         this.preditions = this.preditions.sort((a,b)=>{return a.start - b.start})
-        
     },
 
 	// Override socketNotificationReceived method.
