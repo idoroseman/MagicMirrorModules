@@ -20,6 +20,7 @@ module.exports = NodeHelper.create({
 		this.tle = {}
 		console.log("Starting node helper for: " + this.name);
 		this.download_amsat()
+		this.download_celestrack()
 		setInterval(() => {
 			this.calculate_predictions()
 			this.sendSocketNotification("UPDATE", {preditions: this.preditions.slice(0, this.lines)});
@@ -48,7 +49,24 @@ module.exports = NodeHelper.create({
 	},
 
     download_celestrack : function(){
-    
+		fetch("http://www.celestrak.com/NORAD/elements/weather.txt")
+		.then((response)=>{return response.text()})
+		.then((text)=>{
+		     var i = 0;
+		     var item = ""
+		     var name = ""
+		     text.split('\n').forEach((line, i)=>{
+                  if ((i % 3 == 0) && (item != "")) {
+                      this.tle[name] = item		    
+                      name = ""
+                      item = ""
+                    }   
+                  if (i%3 == 0)
+                    name = line
+                  else
+                    item += line + '\n'
+		       })
+		})    
     
     },
     

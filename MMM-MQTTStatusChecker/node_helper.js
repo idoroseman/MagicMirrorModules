@@ -12,14 +12,14 @@ module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function(notification, payload) {
         var self = this;
-            console.log("===========");
-			console.log(notification);
-            console.log("===========");
+        console.log("===========");
+			  console.log(notification);
+        console.log("===========");
 
 		if (notification === 'MQTT_CONFIG') {
             self.config = payload;
             console.log("===========");
-			console.log(self.name + ': Config = '+payload);
+						console.log(self.name + ': Config = '+payload);
             // Read topics to subscribe
             for(i = 0; i < self.config.subscriptions.length; i++){
                 topics[i] = self.config.subscriptions[i].topic;
@@ -48,7 +48,7 @@ module.exports = NodeHelper.create({
                 console.log(self.name + ': subscribing to ' + topics);
                 self.client.subscribe(topics);
             });
-              
+
             self.client.on('message', function (topic, payload) {
                 // Find correct topic
                 console.log(topic+"==>"+payload);
@@ -61,5 +61,5 @@ module.exports = NodeHelper.create({
                 }
             });
 		}
-	},        
+	},
 });
