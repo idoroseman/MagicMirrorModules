@@ -26,10 +26,10 @@ Module.register("ramzor",{
 	},
 
   updateData: function () {
+		Log.log(this.name + " loading data");
 		this.getCitiesData().then(result => {
 			this.rows = ""
 	  	result.forEach(data=>{
-				console.log(data);
 		    this.rows += "<td style=\"background-color:"+this.colors[data.result.records[0].colour]+"\"><center>"
 		    this.rows += data.result.records[0].City_Name + "<br/>"
 		    this.rows += "<span style=\"font-size:10vw\">" + data.result.records[0].final_score + "</span>"
@@ -38,19 +38,25 @@ Module.register("ramzor",{
 		    this.rows += data.result.records[0].Date
 		    this.rows += "</center></td>";
 		  })
+			Log.log(this.name+" request dom update")
 			this.updateDom();
 		})
 	},
 
 	getCitiesData: async function () {
-		var	url = new URL('https://data.gov.il/api/3/action/datastore_search');
-	  const responses = await Promise.all(this.config.cities.map(cityName=>{
-	  	var params = {resource_id:"8a21d39d-91e3-40db-aca1-f73f7ab1df69", sort:"Date desc", limit:5, q:cityName}
-		  url.search = new URLSearchParams(params).toString();
-		  return fetch(url)
+		Log.log("ramzor Start");
+//		let nocors = "https://cors-anywhere.herokuapp.com/"
+
+		const responses = await Promise.all(this.config.cities.map(cityName=>{
+			Log.log("ramzor city"+cityName);
+			var url = new URL('https://data.gov.il/api/3/action/datastore_search')
+	   	var params = {resource_id:"8a21d39d-91e3-40db-aca1-f73f7ab1df69", sort:"Date desc", limit:5, q:cityName}
+		  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+			return fetch(url);
 	  }))
+		console.log(responses);
 	  const data = await Promise.all(responses.map(response => response.json()))
-	  console.log(data)
+		Log.log(this.name + " got data: " + data);
 	  return data
 	},
 
