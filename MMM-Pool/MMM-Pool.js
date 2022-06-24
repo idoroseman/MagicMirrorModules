@@ -14,7 +14,7 @@ Module.register("MMM-Pool",{
         seperator : " | ",
         closed : "סגור",
 	},
-	
+
 	start: function() {
         this.events = {
             morning_start : undefined,
@@ -25,10 +25,10 @@ Module.register("MMM-Pool",{
 		var self = this;
 		setInterval(() => {
 			self.updateDom(); // no speed defined, so it updates instantly.
-		}, 60 * 1000); //perform every hour
+		}, 60 * 60 * 1000); //perform every hour
 		this.sendSocketNotification("START", {});
 	},
-	
+
 		// handle data from node_helper
 	socketNotificationReceived: function (notification, payload) {
 	    console.log(notification);
@@ -41,7 +41,7 @@ Module.register("MMM-Pool",{
 			}
 		this.updateDom();
 	},
-	
+
 	// Override dom generator.
 	getDom: function() {
     	//var XLSX = require('xlsx');
@@ -53,41 +53,41 @@ Module.register("MMM-Pool",{
         //var desired_cell = worksheet['A1'];
         //var desired_value = (desired_cell ? desired_cell.v : undefined);
 
-	
+
 		var d = new Date();
 		var n = d.getDay();
 		var timeNow = moment();
 		var timeNowString = moment().format("H:mm");
-		        
+
 		var wrapper = document.createElement("div");
 		var morningText = document.createElement("span");
 		if ((!this.events.morning_start) || (this.events.morning_start === undefined))
 			morningText.innerHTML = this.config.closed;
-		else 
+		else
 			morningText.innerHTML = this.events.morning_start_str + " - " + this.events.morning_end_str;
-		
+
 		var seperatorText = document.createElement("span");
 		seperatorText.innerHTML = this.config.seperator;
-		
+
 		var eveningText = document.createElement("span");
 		if (this.events.evening_start === undefined)
 			eveningText.innerHTML = this.config.closed;
 		else
 			eveningText.innerHTML = this.events.evening_start_str + " - " + this.events.evening_end_str;
-		
+
 		if (timeNow.hour() >= this.events.morning_end)
 		  morningText.className = "dimmed";
 		else if (timeNow.hour() >= this.events.morning_start)
 		  morningText.style.cssText="color:green;"
-		else 
+		else
 		  morningText.className = "bright";
 
 		if (timeNow.hour()>=this.events.evening_end)
 		  eveningText.className = "dimmed";
 		else if (timeNow.hour() >= this.events.evening_start)
 		  eveningText.style.cssText="color:green;"
-		else 
-		  eveningText.className = "bright";  
+		else
+		  eveningText.className = "bright";
 
         console.log(timeNowString, this.events.morning_start_str, this.events.morning_end_str, this.events.evening_start_str, this.events.evening_end_str)
         console.log(timeNow.hour(), this.events.morning_start, this.events.morning_end, this.events.evening_start, this.events.evening_end)

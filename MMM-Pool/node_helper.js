@@ -77,16 +77,16 @@ module.exports = NodeHelper.create({
 				  break;
 				row++;
 				}
-			while (true) {
-				col++;
-				var cell_address = String.fromCharCode(0x40 + col) + row.toString();
-				var desired_cell = worksheet[cell_address];
-				var desired_value = (desired_cell ? desired_cell.v : undefined);
-				if (desired_value !== undefined)
-				  break;
-				}
+// 			while (true) {
+// 				col++;
+// 				var cell_address = String.fromCharCode(0x40 + col) + row.toString();
+// 				var desired_cell = worksheet[cell_address];
+// 				var desired_value = (desired_cell ? desired_cell.v : undefined);
+// 				if (desired_value !== undefined)
+// 				  break;
+// 				}
 			// parse table
-			row += 3;
+			row += 2;
 			while (true) {			
 				var cell_address = String.fromCharCode(0x40 + col) + row.toString();
 				var desired_cell = worksheet[cell_address];
@@ -96,22 +96,22 @@ module.exports = NodeHelper.create({
 
 				var isodate = this.xlDateToString(desired_value);
 			    // morning start
-				var cell_address = String.fromCharCode(0x40 + col+2) + row.toString();
+				var cell_address = String.fromCharCode(0x40 + col+6) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var morning_start = (desired_cell ? desired_cell.v: undefined);
 				var morning_start_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				// morning end
-				var cell_address = String.fromCharCode(0x40 + col+3) + row.toString();
+				var cell_address = String.fromCharCode(0x40 + col+7) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var morning_end = (desired_cell ? desired_cell.v : undefined);
 				var morning_end_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				//evening start
-				var cell_address = String.fromCharCode(0x40 + col+4) + row.toString();
+				var cell_address = String.fromCharCode(0x40 + col+8) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var evening_start = (desired_cell ? desired_cell.v  : undefined);
 				var evening_start_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
 				// evening end
-				var cell_address = String.fromCharCode(0x40 + col+5) + row.toString();
+				var cell_address = String.fromCharCode(0x40 + col+9) + row.toString();
 				var desired_cell = worksheet[cell_address];
 				var evening_end = (desired_cell ? desired_cell.v : undefined);
 				var evening_end_str = (desired_cell ? this.intToTimeStr(desired_cell.v) : undefined);
