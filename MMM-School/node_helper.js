@@ -19,11 +19,36 @@ module.exports = NodeHelper.create({
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
 	    if (notification === "START") {
-			console.log(this.name+" loading "+payload.filename);
-
-			fs.readFile(this.path+"/"+payload.filename, "utf8", (err, data) => {
+			// hours
+			console.log(this.name, "reading hours");
+			fs.readFile(this.path+"/"+"hours.json", "utf8", (err, data) => {
 				if (err) {
-						console.log("missing file " + payload.filename); // may be filename does not exists?
+						console.log("missing file " + "hours.json"); // may be filename does not exists?
+						return;
+				}
+				var j = JSON.parse(data);
+				this.sendSocketNotification("HOURS_UPDATE", {
+					events: j,
+				});
+	  		});
+			// schedule
+			console.log(this.name+" loading "+payload.schedule);
+			fs.readFile(this.path+"/"+payload.schedule, "utf8", (err, data) => {
+				if (err) {
+						console.log("missing file " + payload.schedule); // may be filename does not exists?
+						return;
+				}
+				var j = this.parse_csv(data);
+				this.sendSocketNotification("SCHEDULE_UPDATE", {
+					events: j,
+				});
+	  		});
+
+			// vacations
+			console.log(this.name+" loading "+payload.vacations);
+			fs.readFile(this.path+"/"+payload.vacations, "utf8", (err, data) => {
+				if (err) {
+						console.log("missing file " + payload.vacations); // may be filename does not exists?
 						return;
 				}
 				var j = this.parse_ical(data);
@@ -41,6 +66,12 @@ module.exports = NodeHelper.create({
 		 
 	},
 	
+	parse_csv: function(data) {
+	    const lines = data.split('\n');
+		const events = lines.map(l => l.split(','))
+		return events;
+	},
+
 	parse_ical: function(data) {
 	    var events = [];
 	    var event = {}
