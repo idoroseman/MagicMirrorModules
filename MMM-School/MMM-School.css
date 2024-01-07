@@ -1,7 +1,8 @@
 .wraooedText {
-  display: block;
-  width: 100px;
-  overflow: hidden;
+  /* display: inline-block; */
+  /* width: 200px;  */
+  max-width: 120px;
+  overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }

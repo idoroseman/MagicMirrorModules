@@ -50,6 +50,7 @@ Module.register("MMM-School",{
 			}
 		else if (notification === "HOURS_UPDATE") {
 			this.hours = payload.events;
+			console.log(this.hours);
 			}
 		else if (notification === "SCHEDULE_UPDATE") {
 			this.classes = payload.events;
@@ -74,8 +75,13 @@ Module.register("MMM-School",{
 
 		// time 
 		var timeWrapper = document.createElement("td")
-		timeWrapper.innerHTML = "שעה";
+		timeWrapper.innerHTML = "";
 		eventWrapper.appendChild(timeWrapper)
+
+		// hours
+		var hoursWrapper = document.createElement("td")
+		hoursWrapper.innerHTML = "שעה";
+		eventWrapper.appendChild(hoursWrapper)
 
 		// today
 		var todayWrapper = document.createElement("td")
@@ -108,25 +114,32 @@ Module.register("MMM-School",{
 
 			// time 
 			var timeWrapper = document.createElement("td")
-			timeWrapper.innerHTML = i;
+			timeWrapper.innerHTML = i ;
 			eventWrapper.appendChild(timeWrapper)
+
+			// hours
+			var hourWrapper = document.createElement("rd");
+			hourWrapper.innerHTML=this.hours[i].start+"-"+this.hours[i].end;
+			hourWrapper.className="xsmall dimmed"
+			eventWrapper.appendChild(hourWrapper)
 
 			// today
 			var todayWrapper = document.createElement("td")
 			todayWrapper.className = "wraooedText"
+			// todayWrapper.style="width: 25%"
 			if ((today[i]  === undefined) || (today[i] === ""))
-				todayWrapper.innerHTML += this.config.empty + "<br/>";
+				todayWrapper.innerHTML += this.config.empty;
 			else
-				todayWrapper.innerHTML += (today[i] || "-" )+ "<br/>";
+				todayWrapper.innerHTML += (today[i] || "-" );
 			eventWrapper.appendChild(todayWrapper)
 
 			// tommorow
 			var tommorowWrapper = document.createElement("td")
-			todayWrapper.className = "wraooedText"
-			if ((today[i]  === undefined) || (today[i] === ""))
-				tommorowWrapper.innerHTML += this.config.empty + "<br/>";
+			tommorowWrapper.className = "wraooedText"
+			if ((tommorow[i]  === undefined) || (tommorow[i] === ""))
+				tommorowWrapper.innerHTML += this.config.empty ;
 			else
-				tommorowWrapper.innerHTML += (tommorow[i] || "-") + "<br/>";
+				tommorowWrapper.innerHTML += (tommorow[i] || "-") ;
 			eventWrapper.appendChild(tommorowWrapper)
 
 			wrapper.append(eventWrapper)
