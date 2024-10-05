@@ -1,0 +1,15 @@
+{% if airlines %}
+    <table class="{{ config.tableClass }}"> 
+    {% for a in airlines %}
+        <tr>
+            <td class="name">{{ f.name }}</td>
+            <td class="name">{{ f.isFlying }}</td>
+            <td class="name">{{ f.notes }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <div class="dimmed light small">
+        {{ "LOADING" | translate }}
+    </div>
+{% endif %}
