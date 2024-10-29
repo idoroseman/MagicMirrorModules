@@ -17,16 +17,20 @@ Module.register("MMM-NBA", {
 
   // Define start sequence.
   start: function () {
-    Log.info("Starting module: " + this.name);
+    console.info("Starting module: " + this.name);
 
     this.pastGames = [];
     this.dueGames = [];
-    this.seasonYear = "unknown";
+    this.seasonYear = "started";
+    this.debugMsg = null;
     this.updateGames();
     setInterval(() => {
       this.updateGames();
       //   this.updateDom(this.config.fadeSpeed);
     }, this.config.updateInterval);
+    // setInterval(() => {
+    //   this.updateDom(this.config.animationSpeed);
+    // }, 10000);
   },
 
   drawGameRow: function (game) {
@@ -54,8 +58,8 @@ Module.register("MMM-NBA", {
       center.innerHTML =
         game["homeTeam"]["score"] + " - " + game["awayTeam"]["score"];
     } else {
-		center.innerHTML = game.gameDate.split(' ')[0];
-	}
+      center.innerHTML = game.gameDate.split(" ")[0];
+    }
     row.appendChild(center);
     // away team
     var awayTeam = document.createElement("td");
@@ -75,6 +79,7 @@ Module.register("MMM-NBA", {
     row.appendChild(awayTeamFlag);
     return row;
   },
+
   // Override dom generator.
   getDom: function () {
     var wrapper = document.createElement("div");
@@ -95,10 +100,13 @@ Module.register("MMM-NBA", {
       i < this.pastGames.length;
       i++
     ) {
-      table.appendChild(this.drawGameRow(this.pastGames[i]));
+      if (this.pastGames[i] !== undefined)
+        table.appendChild(this.drawGameRow(this.pastGames[i]));
     }
-	for (var i = 0; i<this.config.dueGamesCount; i++)
-		table.appendChild(this.drawGameRow(this.dueGames[i]));
+	for (var i = 0; i<this.config.dueGamesCount; i++) {
+		if (this.dueGames[i] !== undefined)
+      table.appendChild(this.drawGameRow(this.dueGames[i]));
+    }
     return table;
   },
 
@@ -107,20 +115,20 @@ Module.register("MMM-NBA", {
    * Calls processWeather on succesfull response.
    */
   updateGames: function () {
+    this.seasonYear = "loading";
     let nocors = "https://cors-anywhere.herokuapp.com/";
     const url =
       "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json";
-    fetch(nocors + url, {
-      mode: "cors",
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      }
-    })
+    this.debugMsg = "fetching data";
+    fetch(nocors + url)
       .then((response) => {
+        this.debugMsg = "got response";
         return response.json();
       })
       .then((myJson) => {
-        console.log(this.config);
+        this.seasonYear = myJson;
+        return;
+        // console.log(this.config);
         this.pastGames = [];
         this.dueGames = [];
         this.seasonYear = myJson.leagueSchedule.seasonYear;
@@ -136,13 +144,15 @@ Module.register("MMM-NBA", {
             }
           });
         });
-
-        console.log(this.pastGames);
-        console.log(this.dueGames);
+        // console.log(this.pastGames);
+        // console.log(this.dueGames);
+        this.debugMsg = "updating dom";
         this.updateDom(this.config.animationSpeed);
       })
       .catch((err) => {
         console.log(err);
+        this.debugMsg = err;
+        this.seasonYear = "error loading (" + err + ")";
       });
   }
 });

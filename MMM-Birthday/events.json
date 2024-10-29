@@ -2,7 +2,6 @@
   "events":[
 	{"type":"birthday", "title":"ברוריה", "date":"24 APR 1946" },
 	{"type":"birthday", "title":"עדו רוזמן", "date":"7 NOV 1970" },
-	{"type":"birthday", "title":"ערן רוזמן", "date":"7 APR 1974" },
 	{"type":"birthday", "title":"ענת רוזמן", "date":"29 AUG 1979" },
 	{"type":"birthday", "title":"טובה שדה", "date":"5 MAR 1940" },
 	{"type":"birthday", "title":"אמנון שדה", "date":"14 SEP 1936" },
@@ -10,7 +9,6 @@
 	{"type":"birthday", "title":"מאיה שדה", "date":"12 JUL 1971" },
 	{"type":"birthday", "title":"אופיר צברי", "date":"30 MAY 1964" },
 	{"type":"birthday", "title":"דוד משה", "date":"16 JAN 1971" },
-	{"type":"birthday", "title":"רוני רוזמן", "date":"20 JAN 1978" },
 	{"type":"birthday", "title":"טל רוזמן", "date":"17 JAN 2008" },
 	{"type":"birthday", "title":"אלון משה", "date":"22 APR 2010" },
 	{"type":"birthday", "title":"שני משה", "date":"9 APR 2012" },
@@ -18,9 +16,6 @@
 	{"type":"birthday", "title":"איב מודי", "date":"11 JAN 1992" },
 	{"type":"birthday", "title":"pradip modi", "date":"24 DEC 1959" },
 	{"type":"birthday", "title":"אניס מודי", "date":"11 JAN 1992" },
-	{"type":"birthday", "title":"יענקלה בירק", "date":"1 SEP 1940" },
-	{"type":"birthday", "title":"יותם בירק", "date":"1 SEP 1970" },
-	{"type":"birthday", "title":"עדה לינסקר", "date":"24 JUN 1940" },
 	{"type":"birthday", "title":"נטע בירק", "date":"25 JUN 1994" },
 	{"type":"birthday", "title":"דוד חוה", "date":"23 MAR 1970" },
 	{"type":"birthday", "title":"אלי חוה", "date":"5 AUG 1971" },
@@ -48,17 +43,11 @@
 	{"type":"birthday", "title":"מיכל חזון", "date":"02 JUN 1961" },
 	{"type":"birthday", "title":"מני וייס", "date":"15 SEP 1971" },
 	{"type":"birthday", "title":"רם גלבוע", "date":"22 JUN 1970" },
-	{"type":"birthday", "title":"נעה ציפור", "date":"02 AUG 1974"},
-	{"type":"birthday", "title":"גל מהולנד", "date":"25 DEC 1973"},
     {"type":"birthday", "title":"אירנה", "date":"28 OCT 1955"},
     {"type":"birthday", "title":"איריס פורטוגלי", "date":"14 JUL 1965"},
     {"type":"birthday", "title":"סיגי", "date":"05 SEP 1969"},
-    {"type":"birthday", "title":"שלי ברנר", "date":"13 JAN 1962"},
-    {"type":"birthday", "title":"אילנה", "date":"5 MAY 1961"},
-    {"type":"birthday", "title":"belle mayo", "date":"20 FEB 1995"},
-    {"type":"birthday", "title":"לי גרא", "date":"28 AUG 1991"},
-    {"type":"birthday", "title":"אטי גרא", "date":"25 AUG 1958"},
     {"type":"birthday", "title":"קולין גדג׳", "date":"3 APR 1994"},
-    {"type":"birthday", "title":"מוטי סלטי", "date":"29 JUN 1975"}
+    {"type":"birthday", "title":"מוטי סלטי", "date":"29 JUN 1975"},
+	{"type":"birthday", "title":"עדן מודי", "date":"18 OCT 2023"}
   ]
 }

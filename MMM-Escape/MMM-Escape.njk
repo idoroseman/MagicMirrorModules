@@ -1,11 +1,14 @@
-{% if airlines %}
-    <table class="{{ config.tableClass }}"> 
-    {% for a in airlines %}
-        <tr>
-            <td class="name">{{ f.name }}</td>
-            <td class="name">{{ f.isFlying }}</td>
-            <td class="name">{{ f.notes }}</td>
-        </tr>
+{% if loaded %}
+    <table>
+    {% for item in items %}
+    <tr>
+        <td>
+        {% if item.isFlying %}  <span style="color:green">&check;</span>{% else %}<span style="color:red">&#x2715;</span>{% endif %}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.notes }}</td>
+    </tr>
+    {% else %}
+    <tr><td>no items to show</td></tr>
     {% endfor %}
     </table>
 {% else %}
