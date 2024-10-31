@@ -12,25 +12,23 @@ Module.register("MMM-NBA", {
     updateInterval: 10 * 60 * 1000, // every 10 minutes
     teams: [],
     pastGamesCount: 3,
-    dueGamesCount: 2
+    dueGamesCount: 2,
+    nocors: "https://cors-anywhere.herokuapp.com/",
   },
 
+  pastGames: [],
+  dueGames: [],
+  seasonYear: "started",
+  url: "http://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json",
+  
   // Define start sequence.
   start: function () {
-    console.info("Starting module: " + this.name);
+    Log.info("Starting module: " + this.name);
 
-    this.pastGames = [];
-    this.dueGames = [];
-    this.seasonYear = "started";
-    this.debugMsg = null;
     this.updateGames();
     setInterval(() => {
       this.updateGames();
-      //   this.updateDom(this.config.fadeSpeed);
     }, this.config.updateInterval);
-    // setInterval(() => {
-    //   this.updateDom(this.config.animationSpeed);
-    // }, 10000);
   },
 
   drawGameRow: function (game) {
@@ -110,49 +108,65 @@ Module.register("MMM-NBA", {
     return table;
   },
 
+  getJSON: function(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+    xhr.send();
+  },
+
   /* updateWeather(compliments)
    * Requests new data from openweather.org.
    * Calls processWeather on succesfull response.
    */
   updateGames: function () {
     this.seasonYear = "loading";
-    let nocors = "https://cors-anywhere.herokuapp.com/";
-    const url =
-      "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json";
-    this.debugMsg = "fetching data";
-    fetch(nocors + url)
-      .then((response) => {
-        this.debugMsg = "got response";
-        return response.json();
-      })
-      .then((myJson) => {
-        this.seasonYear = myJson;
-        return;
-        // console.log(this.config);
-        this.pastGames = [];
-        this.dueGames = [];
-        this.seasonYear = myJson.leagueSchedule.seasonYear;
-        myJson["leagueSchedule"]["gameDates"].forEach((d) => {
-          const gameDate = d["gameDate"];
-          d["games"].forEach((g) => {
-            if (
-              this.config.teams.includes(g.homeTeam.teamTricode) ||
-              this.config.teams.includes(g.awayTeam.teamTricode)
-            ) {
-              if (g.gameStatus === 3) this.pastGames.push({ ...g, gameDate });
-              else this.dueGames.push({ ...g, gameDate });
-            }
-          });
-        });
-        // console.log(this.pastGames);
-        // console.log(this.dueGames);
-        this.debugMsg = "updating dom";
-        this.updateDom(this.config.animationSpeed);
-      })
-      .catch((err) => {
-        console.log(err);
-        this.debugMsg = err;
-        this.seasonYear = "error loading (" + err + ")";
-      });
+    
+    Log.info("loading ", this.config.nocors + this.url);
+
+    fetch(this.config.nocors + this.url, {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }
+    })
+    .then((res) => res.json())
+    .then((j) => Log.info(j))
+      // .then((myJson) => {
+      //   Log.info("json");
+      //   this.pastGames = [];
+      //   this.dueGames = [];
+      //   this.seasonYear = myJson.leagueSchedule.seasonYear;
+      //   myJson["leagueSchedule"]["gameDates"].forEach((d) => {
+      //     const gameDate = d["gameDate"];
+      //     d["games"].forEach((g) => {
+      //       if (
+      //         this.config.teams.includes(g.homeTeam.teamTricode) ||
+      //         this.config.teams.includes(g.awayTeam.teamTricode)
+      //       ) {
+      //         if (g.gameStatus === 3) this.pastGames.push({ ...g, gameDate });
+      //         else this.dueGames.push({ ...g, gameDate });
+      //       }
+      //     });
+      //   });
+      //   // console.log(this.pastGames);
+      //   // console.log(this.dueGames);
+      //   this.seasonYear = myJson.leagueSchedule.seasonYear;
+      //   Log.info("done");
+      //   this.updateDom(this.config.animationSpeed);
+      // })
+      // .catch((err) => {
+      //   Log.info(err);
+      //   this.seasonYear = "error loading <br/>" + err ;
+      //   this.updateDom(this.config.animationSpeed);
+      // });
   }
 });

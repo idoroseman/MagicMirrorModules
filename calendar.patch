@@ -1,0 +1,43 @@
+diff --git a/css/main.css b/css/main.css
+old mode 100644
+new mode 100755
+diff --git a/modules/default/calendar/calendar.css b/modules/default/calendar/calendar.css
+index f8e3bd79..7b483fe6 100644
+--- a/modules/default/calendar/calendar.css
++++ b/modules/default/calendar/calendar.css
+@@ -22,3 +22,11 @@
+   text-align: right;
+   vertical-align: top;
+ }
++
++.calendar .dateheader {
++  background-color: #333;
++}
++
++.today td::after {
++  content: " (today)";
++}
+\ No newline at end of file
+diff --git a/modules/default/calendar/calendar.js b/modules/default/calendar/calendar.js
+index 31b863eb..d94ea2fc 100644
+--- a/modules/default/calendar/calendar.js
++++ b/modules/default/calendar/calendar.js
+@@ -252,6 +252,18 @@ Module.register("calendar", {
+ 
+ 		let lastSeenDate = "";
+ 
++		// always show today
++		let today = Date.now();
++		lastSeenDate = moment(today, "x").format(this.config.dateFormat);
++		const todayeRow = document.createElement("tr");
++		todayeRow.className = "dateheader normal today";
++		const todayCell = document.createElement("td");
++		todayCell.colSpan = "3";
++		todayCell.innerHTML = lastSeenDate;
++		todayCell.style.paddingTop = "10px";
++		todayeRow.appendChild(todayCell);
++		wrapper.appendChild(todayeRow);
++		
+ 		events.forEach((event, index) => {
+ 			const dateAsString = moment(event.startDate, "x").format(this.config.dateFormat);
+ 			if (this.config.timeFormat === "dateheaders") {
