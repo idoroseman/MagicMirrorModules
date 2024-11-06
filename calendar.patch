@@ -14,7 +14,7 @@ index f8e3bd79..7b483fe6 100644
 +  background-color: #333;
 +}
 +
-+.today td::after {
++.dateheader .today td::after {
 +  content: " (today)";
 +}
 \ No newline at end of file
@@ -33,7 +33,7 @@ index 31b863eb..d94ea2fc 100644
 +		todayeRow.className = "dateheader normal today";
 +		const todayCell = document.createElement("td");
 +		todayCell.colSpan = "3";
-+		todayCell.innerHTML = lastSeenDate;
++		todayCell.innerHTML = lastSeenDate+ " " + this.translate("TODAY");
 +		todayCell.style.paddingTop = "10px";
 +		todayeRow.appendChild(todayCell);
 +		wrapper.appendChild(todayeRow);

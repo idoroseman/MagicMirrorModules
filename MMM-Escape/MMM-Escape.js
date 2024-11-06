@@ -2,7 +2,7 @@ Module.register("MMM-Escape", {
 	// Default module config.
 	defaults: {
     header: "Airlines",
-    nocors: "https://cors-anywhere.herokuapp.com/",
+    nocors: "http://cors-anywhere.herokuapp.com/",
     updateInterval: 10 * 60 * 60 * 1000, // every 10 minutes
 	},
 
@@ -10,7 +10,7 @@ Module.register("MMM-Escape", {
   items: [],
 
   baseUrl:
-    "https://www.passportcard.co.il/article/airlines-at-war/",
+    "http://www.passportcard.co.il/article/airlines-at-war/",
 
   start: function () {
     Log.info("Starting module: " + this.name);

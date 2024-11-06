@@ -1,0 +1,20 @@
+<table>
+    {% for game in games %}
+    <tr>
+        <!-- site images are https://cdn.nba.com/logos/nba/1610612745/primary/L/logo.svg -->
+        <td><img class="teamlogo" src="https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/{{ game.homeTricode }}.png" /></td>
+        <td class="{{ game.homeClass }}">{{ game.homeTricode }}</td>
+        <td class="align-center">
+        {% if game.gameStatus == 3 %}
+        {{ game.homeScore }} - {{ game.awayScore }}
+        {% else %}
+        {{ game.gameDate }}
+        {% endif %}
+        </td>
+        <td class="{{ game.awayClass }} align-left">{{ game.awayTricode}}</td>
+        <td><img class="teamlogo" src="https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/{{ game.awayTricode }}.png" /></td>
+    </tr>
+    {% else %}
+    <tr><td>no items to show</td></tr>
+    {% endfor %}
+</table>
