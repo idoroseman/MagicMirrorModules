@@ -4,7 +4,7 @@ Module.register("MMM-NBA", {
         header: "NBA",
         // nocors: "https://cors-anywhere.herokuapp.com/",
         nocors: "http://magicmirror.local:8000",
-        updateInterval: 10 * 60 * 60 * 1000, // every 10 minutes
+        updateInterval: 2 * 60 * 60 , // every 10 minutes
 	},
 
     games:[],
@@ -18,15 +18,18 @@ Module.register("MMM-NBA", {
         this.fetchData();
         // Schedule update timer.
         setInterval(() => {
-        this.fetchData;
-        }, this.config.updateInterval);
+            this.fetchData();
+        }, this.config.updateInterval * 1000);
     },
 
     fetchData() {
         Log.info(this.name + " fetching data");
+        this.lastUpdated = new Date().toLocaleString("en-IL", { dateStyle: 'short', timeStyle: 'short' });
         fetch(this.baseUrl)
         .then((res) => res.json())
         .then((houston) => {
+            this.status = "ok";
+            this.games = [];
             houston.schedule.filter(x=>x.st==3).slice(-3).forEach(element => {
                 this.games.push({
                     gameId: element.gid,
@@ -38,14 +41,14 @@ Module.register("MMM-NBA", {
                     homeCity: element.h.tc,
                     homeTricode: element.h.ta,
                     homeScore: element.h.s,
-                    homeClass: element.h.s > element.v.s ? "bright": "",
+                    homeClass: Number(element.h.s) > Number(element.v.s) ? "bright": "",
 
                     awayId: element.v.tid,
                     awayName: element.v.tn,
                     awayCity: element.v.tc,
                     awayTricode: element.v.ta,
                     awayScore: element.v.s,
-                    awayClass: element.v.s > element.h.s ? "bright": "",
+                    awayClass: Number(element.v.s) > Number(element.h.s) ? "bright": "",
                 })
             });
             houston.schedule.filter(x=>x.st!=3).slice(0,2).forEach(element => {
@@ -71,7 +74,7 @@ Module.register("MMM-NBA", {
             });
             this.updateDom();
         })
-        .catch((err)=>{Log.info(err)})
+        .catch((err)=>{Log.info(err); this.status="err"})
     },
 
     getStyles () {
@@ -83,6 +86,6 @@ Module.register("MMM-NBA", {
 	},
 
 	getTemplateData () {
-		return { games:this.games }
+		return { games:this.games, lastUpdated:this.lastUpdated, status:this.status }
 	}
 });
