@@ -17,7 +17,7 @@ Module.register("MMM-Quotes", {
     fadeSpeed: 4, // How fast (in SECONDS) to fade out and back in when changing quotes
     category: "random", // Category to use
     maxLength: 150,
-    quotes: []
+    nocors: "https://cors-anywhere.herokuapp.com/",
   },
 
   // Define start sequence.
@@ -44,10 +44,9 @@ Module.register("MMM-Quotes", {
     var quote = "";
     var attribute = "";
 
-    let nocors = "https://cors-anywhere.herokuapp.com/";
     let baseurl = "http://www.pitgam.net/random.php?t=1";
 
-    fetch(nocors + baseurl)
+    fetch(this.config.nocors + baseurl)
       .then((response) => {
         return response.text();
       })
