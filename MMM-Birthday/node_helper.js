@@ -12,7 +12,7 @@ var moment = require('moment');
 module.exports = NodeHelper.create({
 	// Override start method.
 	start: function() {
-		this.events = null;
+		this.events = [];
 		console.log("Starting node helper for: " + this.name);
 		// Schedule update interval.
 		this.lastUpdate = -1;
@@ -23,7 +23,7 @@ module.exports = NodeHelper.create({
 				this.lastUpdate = this.getDayOfWeek();
 				this.recalcEvents();
 				this.sendSocketNotification("EVENTS_UPDATE", {
-					events: this.events.slice(0, 6)
+					events: this.events
 				});
 				}
 			},60*1000);
@@ -62,17 +62,20 @@ module.exports = NodeHelper.create({
 	},
 
 	recalcEvents: function(){
- 		 var currentYear = moment().year();
-     var nextYear = moment().add(1,'y').year()
-     var list = this.events;
-		 for (var i in list) {
+ 		var currentYear = moment().year();
+		var nextYear = moment().add(1,'y').year()
+		var list = this.events;
+		for (var i in list) {
 			 tokens = list[i].date.split(' ')
 		   list[i].nextDate = moment(currentYear+"-"+tokens[1]+"-"+tokens[0],"YYYY-MMM-DD")
 			 if (moment().diff(list[i].nextDate, 'days') > 2)
 			   list[i].nextDate = moment(nextYear+"-"+tokens[1]+"-"+tokens[0],"YYYY-MMM-DD")
 			 list[i].count = list[i].nextDate.diff(moment(list[i].date,'DD MMM YYYY'),'years')
 		 }
-		 list.sort((a,b)=>{return a.nextDate.diff(b.nextDate,'days')})
+		 try {
+			list.sort((a,b)=>{return a.nextDate.diff(b.nextDate,'days')})
+			list = list.slice(0, 6)
+		 } catch (e) { console.log(e); }
 		 this.events = list
 		 //for (var i in list)
 		 //  console.log(JSON.stringify(list[i]))
