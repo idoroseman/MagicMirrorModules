@@ -57,9 +57,11 @@ Module.register("MMM-Birthday",{
 	// display data.
 	getDom: function() {
 		var icons = {
-			birthday: "birthday-cake",
+		  birthday: "birthday-cake",
 		  wedding: "diamond",
-                  anniversary: "diamond"
+                  anniversary: "diamond",
+                  memorial: "monument"
+
 		}
 	  var wrapper = document.createElement("table");
 	  wrapper.className = "small";
