@@ -1,0 +1,11 @@
+{
+  "name": "MMM-Irrigation",
+  "version": "1.0.0",
+  "description": "MagicMirror2 module to display Home Assistant moisture sensors as progress bars.",
+  "main": "MMM-Irrigation.js",
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
