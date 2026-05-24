@@ -15,7 +15,7 @@
   font-weight: 500;
   white-space: nowrap;
   text-align: left;
-  color: #222;
+
   min-width: 90px;
   max-width: 180px;
   overflow: hidden;
@@ -46,4 +46,8 @@
   border-radius: 9px 0 0 9px;
   transition: width 0.5s;
   box-shadow: 0 1px 2px rgba(60,60,60,0.08);
+}
+
+.progress-mean {
+  background: linear-gradient(90deg, #42a5f5 60%, #1e88e5 100%);
 }

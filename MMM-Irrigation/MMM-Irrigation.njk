@@ -3,11 +3,12 @@
   <table class="irrigation-table">
     <tbody>
       {% for sensor in sensors %}
+        {% set isMean = sensor.name and ('mean' in (sensor.name | lower)) %}
         <tr>
-          <td class="sensor-name">{{ sensor.name  | replace('Soil Moisture Percent', '') | replace('Moisture', '') | trim }}</td>
+          <td class="sensor-name">{{ sensor.name  | replace('Soil Moisture Percent', '') | replace('Moisture', '') | replace('mean moisture', '') | trim }}</td>
           <td class="progress-bar-cell">
             <span class="progress-bar">
-              <span class="progress" style="width: {{ sensor.value }}%">{{ sensor.value }}%</span>
+              <span class="progress{% if isMean %} progress-mean{% endif %}" style="width: {{ sensor.value }}%">{{ sensor.value }}%</span>
             </span>
           </td>
         </tr>

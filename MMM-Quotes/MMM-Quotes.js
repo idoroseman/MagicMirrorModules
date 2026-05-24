@@ -16,15 +16,13 @@ Module.register("MMM-Quotes", {
     updateInterval: 30 * 60, // Value is in SECONDS
     fadeSpeed: 4, // How fast (in SECONDS) to fade out and back in when changing quotes
     category: "random", // Category to use
-    maxLength: 150,
-    nocors: "https://cors-anywhere.herokuapp.com/",
+    maxLength: 150
   },
 
   // Define start sequence.
   start: function () {
     Log.info("Starting module: " + this.name);
 
-    this.lastQuoteIndex = -1;
     this.quote = "";
     this.author = "";
     this.randomQuote();
@@ -41,39 +39,26 @@ Module.register("MMM-Quotes", {
    * return quote string - A quote.
    */
   randomQuote: function () {
-    var quote = "";
-    var attribute = "";
+    this.sendSocketNotification("GET_QUOTE", {
+      maxLength: this.config.maxLength
+    });
+  },
 
-    let baseurl = "http://www.pitgam.net/random.php?t=1";
+  socketNotificationReceived: function (notification, payload) {
+    if (notification !== "QUOTE_DATA") {
+      return;
+    }
 
-    fetch(this.config.nocors + baseurl)
-      .then((response) => {
-        return response.text();
-      })
-      .then((text) => {
-		try {
-			// parse html (ugly way)
-			var el = document.createElement("html");
-			el.innerHTML = text;
-			this.quote = el
-			.getElementsByClassName("media-body")[0]
-			.getElementsByTagName("div")[0].innerText;
-			this.author = el
-			.getElementsByClassName("media-attributed")[0]
-			.innerText.substring(2);
-			// this.scheduleUpdate();
-			console.log(this.quote, this.author);
-		}
-		catch (err) {
-			console.log(err);
-			console.log(text);
-			this.quote = text
-			this.author = "cors error"
-		}
-        if (this.quote.length < this.config.maxLength)
-          this.updateDom(this.config.fadeSpeed * 1000);
-        else this.randomQuote();
-      });
+    if (payload && payload.error) {
+      this.quote = "Unable to fetch quote";
+      this.author = payload.error;
+      this.updateDom(this.config.fadeSpeed * 1000);
+      return;
+    }
+
+    this.quote = (payload && payload.quote) || "";
+    this.author = (payload && payload.author) || "";
+    this.updateDom(this.config.fadeSpeed * 1000);
   },
 
   // Override dom generator.
